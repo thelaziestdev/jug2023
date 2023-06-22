@@ -11,7 +11,7 @@ class RestaurantTable(
         var isOpen: Boolean = false,
 ) {
 
-        @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+        @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
         @JoinColumn
         val products: MutableList<TableProduct> = mutableListOf()
 }
