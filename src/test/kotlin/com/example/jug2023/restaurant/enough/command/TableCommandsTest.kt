@@ -73,7 +73,7 @@ class TableCommandsTest @Autowired constructor(
 
     @Test
     fun `can add product to table`() {
-        val table = RestaurantTable("1", "RestaurantTable one", isOpen = true)
+        val table = RestaurantTable("1", "RestaurantTable one", isOpen = true, isPayed = false)
         tableRepository.save(table)
 
         addProductToTableCommandHandler.handle(AddProductToTableCommand("1", listOf(TableProduct("1", 1, 1f))))
@@ -96,8 +96,9 @@ class TableCommandsTest @Autowired constructor(
 
     @Test
     fun `can pay table`() {
-        val table = RestaurantTable("1", "RestaurantTable one", isOpen = true)
+        val table = RestaurantTable("1", "RestaurantTable one", isOpen = true, isPayed = false)
         table.products.add(TableProduct("1", 1, 1f))
+        table.fireProduct("1")
         tableRepository.save(table)
 
         payTableCommandHandler.handle(PayTableCommand("1"))
