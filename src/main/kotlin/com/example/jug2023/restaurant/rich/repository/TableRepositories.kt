@@ -1,6 +1,5 @@
 package com.example.jug2023.restaurant.rich.repository
 
-import com.example.jug2023.restaurant.anemic.TableNotFoundException
 import com.example.jug2023.restaurant.rich.ClosedTable
 import com.example.jug2023.restaurant.rich.OpenTable
 import com.example.jug2023.restaurant.rich.PayedTable
@@ -98,3 +97,5 @@ class PayedTableRepository(
     }
 
 }
+
+class TableNotFoundException(id: String): RuntimeException("Table $id not found")
