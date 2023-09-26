@@ -3,7 +3,7 @@ package com.example.jug2023.restaurant.anemic
 import jakarta.persistence.*
 
 @Entity
-class RestaurantTable(
+class RestaurantTableAnemic(
         @Id
         val id: String,
         val name: String,
@@ -13,7 +13,7 @@ class RestaurantTable(
 
         @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn
-        val products: MutableList<TableProduct> = mutableListOf()
+        val products: MutableList<TableProductAnemic> = mutableListOf()
 }
 
 

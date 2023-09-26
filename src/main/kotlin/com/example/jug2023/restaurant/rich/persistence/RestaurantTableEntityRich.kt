@@ -3,7 +3,7 @@ package com.example.jug2023.restaurant.rich.persistence
 import jakarta.persistence.*
 
 @Entity
-class RestaurantTableEntity(
+class RestaurantTableEntityRich(
         @Id
         val id: String,
         val name: String,
@@ -13,7 +13,7 @@ class RestaurantTableEntity(
 
         @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
         @JoinColumn
-        val products: MutableList<TableProductEntity> = mutableListOf()
+        val products: MutableList<TableProductEntityRich> = mutableListOf()
 
 }
 

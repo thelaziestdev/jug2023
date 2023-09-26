@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 class PayTableCommand(val id: String) {
     @Component
-    class Handler(
+    class PayTableCommandHandler(
             private val openTableRepository: OpenTableRepository,
             private val payedTableRepository: PayedTableRepository
     ) {

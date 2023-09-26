@@ -1,6 +1,7 @@
 package com.example.jug2023.restaurant.anemic
 
 import com.github.ydespreaux.testcontainers.mysql.MySQLContainer
+import jakarta.transaction.Transactional
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -43,8 +44,9 @@ class RestaurantTableServiceTest @Autowired constructor(
 
 
     @Test
+    @Transactional
     fun `can open table`() {
-        val table = RestaurantTable("1", "RestaurantTableEntity one")
+        val table = RestaurantTableAnemic("1", "RestaurantTableEntity one")
         tableRepository.save(table)
 
         tableService.openTable("1")
@@ -54,16 +56,18 @@ class RestaurantTableServiceTest @Autowired constructor(
     }
 
     @Test
+    @Transactional
     fun `cannot open already opened table`() {
-        val table = RestaurantTable("1", "RestaurantTableEntity one", isOpen = true)
+        val table = RestaurantTableAnemic("1", "RestaurantTableEntity one", isOpen = true)
         tableRepository.save(table)
 
         assertThrows<TableNotAvailableException> { tableService.openTable("1") }
     }
 
     @Test
+    @Transactional
     fun `can close table`() {
-        val table = RestaurantTable("1", "RestaurantTableEntity one", isOpen = true)
+        val table = RestaurantTableAnemic("1", "RestaurantTableEntity one", isOpen = true)
         tableRepository.save(table)
 
         tableService.closeTable("1")
@@ -74,32 +78,35 @@ class RestaurantTableServiceTest @Autowired constructor(
     }
 
     @Test
+    @Transactional
     fun `can add products to table`() {
-        val table = RestaurantTable("1", "RestaurantTableEntity one")
+        val table = RestaurantTableAnemic("1", "RestaurantTableEntity one")
         tableRepository.save(table)
 
         tableService.openTable("1")
-        tableService.addProducts("1", listOf(TableProduct("1", 1, 1.0f)))
+        tableService.addProducts("1", listOf(TableProductAnemic("1", 1, 1.0f)))
 
         val tableAfterAddProducts = tableRepository.findById("1").get()
         assertTrue(tableAfterAddProducts.products.isNotEmpty())
     }
 
     @Test
+    @Transactional
     fun `cannot add products to not open table`() {
-        val table = RestaurantTable("1", "RestaurantTableEntity one")
+        val table = RestaurantTableAnemic("1", "RestaurantTableEntity one")
         tableRepository.save(table)
 
-        assertThrows<TableNotOpenException> { tableService.addProducts("1", listOf(TableProduct("1", 1, 1.0f))) }
+        assertThrows<TableNotOpenException> { tableService.addProducts("1", listOf(TableProductAnemic("1", 1, 1.0f))) }
     }
 
     @Test
+    @Transactional
     fun `can release products from table`() {
-        val table = RestaurantTable("1", "RestaurantTableEntity one")
+        val table = RestaurantTableAnemic("1", "RestaurantTableEntity one")
         tableRepository.save(table)
 
         tableService.openTable("1")
-        tableService.addProducts("1", listOf(TableProduct("1", 1, 1.0f)))
+        tableService.addProducts("1", listOf(TableProductAnemic("1", 1, 1.0f)))
         tableService.releaseProducts("1", listOf("1"))
 
         val tableAfterReleaseProducts = tableRepository.findById("1").get()
@@ -107,12 +114,13 @@ class RestaurantTableServiceTest @Autowired constructor(
     }
 
     @Test
+    @Transactional
     fun `can pay table`() {
-        val table = RestaurantTable("1", "RestaurantTableEntity one")
+        val table = RestaurantTableAnemic("1", "RestaurantTableEntity one")
         tableRepository.save(table)
 
         tableService.openTable("1")
-        tableService.addProducts("1", listOf(TableProduct("1", 1, 1.0f)))
+        tableService.addProducts("1", listOf(TableProductAnemic("1", 1, 1.0f)))
         tableService.releaseProducts("1", listOf("1"))
         tableService.payTable("1")
 
@@ -121,12 +129,13 @@ class RestaurantTableServiceTest @Autowired constructor(
     }
 
     @Test
+    @Transactional
     fun `cannot pay for not released products`() {
-        val table = RestaurantTable("1", "RestaurantTableEntity one")
+        val table = RestaurantTableAnemic("1", "RestaurantTableEntity one")
         tableRepository.save(table)
 
         tableService.openTable("1")
-        tableService.addProducts("1", listOf(TableProduct("1", 1, 1.0f)))
+        tableService.addProducts("1", listOf(TableProductAnemic("1", 1, 1.0f)))
 
         assertThrows<ProductNotReleasedException> { tableService.payTable("1") }
     }

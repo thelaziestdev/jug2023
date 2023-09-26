@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class Jug2023Application
 
 fun main(args: Array<String>) {
-    runApplication<Jug2023Application>(*args)
+    runApplication<Jug2023Application>(args = args)
 }

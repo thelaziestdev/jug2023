@@ -7,7 +7,7 @@ class RestaurantTable(
         @Id
         val id: String,
         val name: String,
-        var isPayed: Boolean = true,
+        var isPayed: Boolean = false,
         var isOpen: Boolean = false,
         @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
         @JoinColumn

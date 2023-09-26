@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 data class ReleaseProductsCommand(private val tableId: String, private val productsIds: List<String>) {
 
     @Component
-    class Handler(
+    class ReleaseProductsCommandHandler(
             private val openTableRepository: OpenTableRepository,
     ) {
 

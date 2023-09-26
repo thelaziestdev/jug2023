@@ -1,10 +1,10 @@
-package com.example.jug2023.restaurant.anemic
+package com.example.jug2023.restaurant.rich.persistence
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 
 @Entity
-data class TableProduct(
+data class TableProductEntityRich(
         @Id
         val id: String,
         val quantity: Int,

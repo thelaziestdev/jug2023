@@ -9,7 +9,7 @@ class TableService(private val tableRepository: TableRepository) {
     @Transactional
     fun openTable(tableId: String) {
         val table = tableRepository.findById(tableId).orElseThrow { TableNotFoundException(tableId) }
-        if(!table.isOpen) {
+        if (!table.isOpen) {
             table.isOpen = true
         } else {
             throw TableNotAvailableException(tableId)
@@ -18,14 +18,14 @@ class TableService(private val tableRepository: TableRepository) {
     }
 
     @Transactional
-    fun addProducts(tableId: String, products: List<TableProduct>) {
-            val table = tableRepository.findById(tableId).orElseThrow { TableNotFoundException(tableId) }
-            if(table.isOpen) {
-                table.products.addAll(products)
-            } else {
-                throw TableNotOpenException(tableId)
-            }
-            tableRepository.save(table)
+    fun addProducts(tableId: String, products: List<TableProductAnemic>) {
+        val table = tableRepository.findById(tableId).orElseThrow { TableNotFoundException(tableId) }
+        if (table.isOpen) {
+            table.products.addAll(products)
+        } else {
+            throw TableNotOpenException(tableId)
+        }
+        tableRepository.save(table)
     }
 
     @Transactional
@@ -40,7 +40,7 @@ class TableService(private val tableRepository: TableRepository) {
     @Transactional
     fun payTable(tableId: String) {
         val table = tableRepository.findById(tableId).orElseThrow { TableNotFoundException(tableId) }
-        table.products.forEach { if(it.isReleased.not()) throw ProductNotReleasedException(it.id) }
+        table.products.forEach { if (it.isReleased.not()) throw ProductNotReleasedException(it.id) }
         table.isPayed = true
         tableRepository.save(table)
     }
@@ -57,5 +57,6 @@ class TableService(private val tableRepository: TableRepository) {
 
 class ProductNotReleasedException(id: String) : RuntimeException("Product with id $id was not released!")
 class TableNotOpenException(tableId: String) : RuntimeException("RestaurantTableEntity with id $tableId is not open!")
-class TableNotAvailableException(tableId: String) : RuntimeException("RestaurantTableEntity with id $tableId is not available!")
-class TableNotFoundException(tableId: String): RuntimeException("RestaurantTableEntity with id $tableId was not found!")
+class TableNotAvailableException(tableId: String) :
+    RuntimeException("RestaurantTableEntity with id $tableId is not available!")
+class TableNotFoundException(tableId: String) : RuntimeException("RestaurantTableEntity with id $tableId was not found!")

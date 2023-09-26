@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 data class CloseTableCommand(private val id: String) {
 
     @Component
-    class Handler(
+    class CloseTableCommandHandler(
             private val payedTableRepository: PayedTableRepository,
             private val closeTableRepository: CloseTableRepository
     ) {

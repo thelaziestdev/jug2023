@@ -1,9 +1,9 @@
 package com.example.jug2023.restaurant.rich.command
 
 import com.example.jug2023.restaurant.rich.TableProduct
-import com.example.jug2023.restaurant.rich.persistence.RestaurantTableEntity
+import com.example.jug2023.restaurant.rich.persistence.RestaurantTableEntityRich
 import com.example.jug2023.restaurant.rich.persistence.RestaurantTableEntityRepository
-import com.example.jug2023.restaurant.rich.persistence.TableProductEntity
+import com.example.jug2023.restaurant.rich.persistence.TableProductEntityRich
 import com.github.ydespreaux.testcontainers.mysql.MySQLContainer
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -18,12 +18,12 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @SpringBootTest
 @Testcontainers
 class TableCommandsTest @Autowired constructor(
-        private val tableRepository: RestaurantTableEntityRepository,
-        private val openTableCommandHandler: OpenTableCommand.Handler,
-        private val closeTableCommandHandler: CloseTableCommand.Handler,
-        private val addProductToTableCommandHandler: AddProductToTableCommand.Handler,
-        private val payTableCommandHandler: PayTableCommand.Handler,
-        private val releaseProductsCommandHandler: ReleaseProductsCommand.Handler,
+    private val tableRepository: RestaurantTableEntityRepository,
+    private val openTableCommandHandler: OpenTableCommand.OpenTableCommandHandler,
+    private val closeTableCommandHandler: CloseTableCommand.CloseTableCommandHandler,
+    private val addProductToTableCommandHandler: AddProductToTableCommand.AddProductToTableCommandHandler,
+    private val payTableCommandHandler: PayTableCommand.PayTableCommandHandler,
+    private val releaseProductsCommandHandler: ReleaseProductsCommand.ReleaseProductsCommandHandler,
 ) {
 
     @BeforeEach
@@ -52,7 +52,7 @@ class TableCommandsTest @Autowired constructor(
 
     @Test
     fun `can open table`() {
-        val table = RestaurantTableEntity("1", "RestaurantTableEntity one")
+        val table = RestaurantTableEntityRich("1", "RestaurantTableEntity one")
         tableRepository.save(table)
 
         openTableCommandHandler.handle(OpenTableCommand("1"))
@@ -63,7 +63,7 @@ class TableCommandsTest @Autowired constructor(
 
     @Test
     fun `can close table`() {
-        val table = RestaurantTableEntity("1", "RestaurantTableEntity one", isOpen = true)
+        val table = RestaurantTableEntityRich("1", "RestaurantTableEntity one", isOpen = true)
         tableRepository.save(table)
 
         closeTableCommandHandler.handle(CloseTableCommand("1"))
@@ -74,7 +74,7 @@ class TableCommandsTest @Autowired constructor(
 
     @Test
     fun `can add product to table`() {
-        val table = RestaurantTableEntity("1", "RestaurantTableEntity one", isOpen = true)
+        val table = RestaurantTableEntityRich("1", "RestaurantTableEntity one", isOpen = true)
         tableRepository.save(table)
 
         addProductToTableCommandHandler.handle(AddProductToTableCommand("1", listOf(TableProduct("1", 1, 1f))))
@@ -85,8 +85,8 @@ class TableCommandsTest @Autowired constructor(
 
     @Test
     fun `can release products from table`() {
-        val table = RestaurantTableEntity("1", "RestaurantTableEntity one", isOpen = true)
-        table.products.add(TableProductEntity("1", 1, 1f))
+        val table = RestaurantTableEntityRich("1", "RestaurantTableEntity one", isOpen = true)
+        table.products.add(TableProductEntityRich("1", 1, 1f))
         tableRepository.save(table)
 
         releaseProductsCommandHandler.handle(ReleaseProductsCommand("1", listOf("1")))
@@ -97,8 +97,8 @@ class TableCommandsTest @Autowired constructor(
 
     @Test
     fun `can pay table`() {
-        val table = RestaurantTableEntity("1", "RestaurantTableEntity one", isOpen = true)
-        table.products.add(TableProductEntity("1", 1, 1f))
+        val table = RestaurantTableEntityRich("1", "RestaurantTableEntity one", isOpen = true)
+        table.products.add(TableProductEntityRich("1", 1, 1f))
         tableRepository.save(table)
 
         payTableCommandHandler.handle(PayTableCommand("1"))

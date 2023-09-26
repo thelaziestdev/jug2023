@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 data class OpenTableCommand(private val id: String) {
 
     @Component
-    class Handler(
+    class OpenTableCommandHandler(
             private val openTableRepository: OpenTableRepository,
             private val closeTableRepository: CloseTableRepository
     ) {

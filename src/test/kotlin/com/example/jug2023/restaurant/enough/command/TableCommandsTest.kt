@@ -4,6 +4,7 @@ import com.example.jug2023.restaurant.enough.RestaurantTable
 import com.example.jug2023.restaurant.enough.RestaurantTableRepository
 import com.example.jug2023.restaurant.enough.TableProduct
 import com.github.ydespreaux.testcontainers.mysql.MySQLContainer
+import jakarta.transaction.Transactional
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -50,6 +51,7 @@ class TableCommandsTest @Autowired constructor(
     }
 
     @Test
+    @Transactional
     fun `can open table`() {
         val table = RestaurantTable("1", "RestaurantTable one")
         tableRepository.save(table)
@@ -61,8 +63,9 @@ class TableCommandsTest @Autowired constructor(
     }
 
     @Test
+    @Transactional
     fun `can close table`() {
-        val table = RestaurantTable("1", "RestaurantTable one", isOpen = true)
+        val table = RestaurantTable("1", "RestaurantTable one", isOpen = true, isPayed = true)
         tableRepository.save(table)
 
         closeTableCommandHandler.handle(CloseTableCommand("1"))
@@ -72,6 +75,7 @@ class TableCommandsTest @Autowired constructor(
     }
 
     @Test
+    @Transactional
     fun `can add product to table`() {
         val table = RestaurantTable("1", "RestaurantTable one", isOpen = true)
         tableRepository.save(table)
@@ -83,6 +87,7 @@ class TableCommandsTest @Autowired constructor(
     }
 
     @Test
+    @Transactional
     fun `can release products from table`() {
         val table = RestaurantTable("1", "RestaurantTable one", isOpen = true)
         table.products.add(TableProduct("1", 1, 1f))
@@ -95,9 +100,10 @@ class TableCommandsTest @Autowired constructor(
     }
 
     @Test
+    @Transactional
     fun `can pay table`() {
         val table = RestaurantTable("1", "RestaurantTable one", isOpen = true)
-        table.products.add(TableProduct("1", 1, 1f))
+        table.products.add(TableProduct("1", 1, 1f, isReleased = true))
         tableRepository.save(table)
 
         payTableCommandHandler.handle(PayTableCommand("1"))
